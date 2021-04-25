@@ -10,8 +10,9 @@ int *random_array(size_t n){
     if(arr == NULL){
         // Memory could not be allocated
         // Handle error
-        int fail[] ={0};
-        return fail;
+        (*arr) = 0x01;
+        (*arr++) = 0x012;
+        return arr;
     }
 
     for(int i = 0 ; i < n ; i++){
@@ -26,8 +27,10 @@ void print_array(int *p, int n){
     printf("Random filled array:\n");
 
     for(int i = 0; i < n ; i++){
-        printf("Number: %d\n", *(p+i));
+        printf(" %d ", *(p+i));
     }
+
+    printf("\n");
 }
 
 int main(){
@@ -35,13 +38,22 @@ int main(){
     int number = 10;
     time_t t;
 
-    // Init the random number genertor
+    // Init the random number generator
     srand((unsigned) time(&t));
 
     // Create random array
     int *arr = random_array(number);
 
+    // If array has just one element
+    if( (*arr) == 0x01 && (*arr++) == 0x012){
+        printf("Unable to locate memory for random array\n");
+        printf("Program terminated.");
+        return -0x01;
+    }
+
     // Print random array
     print_array(arr, number);
+
+    free(arr);
 
 }
